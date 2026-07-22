@@ -18,6 +18,13 @@ All four: non-interactive by default, stable exit codes, actionable errors.
 Monorepo: `check` exists package-scoped in every relevant subfolder plus a
 whole-repo gate at root.
 
+The four commands are the whole interface — **narrow and deep**: entry
+points stay few, small, and fast; complexity nests inside helper
+modules/scripts, invisible from the surface. New capability folds into an
+existing entry point (flag or subcommand), not a fifth top-level script —
+adding one requires a recorded decision. Slow checks are debt: the next
+agent pays them every session start.
+
 ## Why
 
 Agents can only act through commands. A missing or interactive command turns
@@ -29,6 +36,9 @@ unreadable. One obvious place beats five conventions.
 - Run each command this session. `setup` twice (idempotence). `check` exit
   code 0; then a deliberate break must exit non-zero.
 - No command prompts for input when run bare.
+- Count top-level entry points: more than the canonical four needs a
+  recorded decision naming each extra. Time `check`; if it exceeds ~2
+  minutes, that is a gap (fast path or fix), not a fact of life.
 
 ## Fix
 

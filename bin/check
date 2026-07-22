@@ -72,7 +72,9 @@ if [[ -f "$tmpl" ]]; then
   done
   grep -q "PREAMBLE SLOT" "$tmpl" || err "AGENTS.md.tmpl missing the runtime PREAMBLE SLOT"
   grep -q "never widen" "$tmpl" || err "AGENTS.md.tmpl delegation section lost the narrow-never-widen rule"
+  grep -q "narrow-and-deep" "$tmpl" || err "AGENTS.md.tmpl session-end lost the toolbelt-consolidation item"
 fi
+grep -q "narrow and deep" "$SKILL/standards/tools.md" 2>/dev/null || err "standards/tools.md lost the narrow-and-deep rule"
 
 # --- 5b. QUALITY.md.tmpl: five fixed dimensions; Progress.md.tmpl sections ---
 q="$SKILL/templates/QUALITY.md.tmpl"

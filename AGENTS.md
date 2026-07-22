@@ -43,3 +43,6 @@ check that keeps the text true. Working style: local edits, no deploy.
 2. `Progress.md` + `features.json` updated (builder never sets `verified`).
 3. Decisions made this session appended to `principles.md`.
 4. Work committed; `git status --short` clean.
+5. Toolbelt still consolidated and fast: `bin/check` stays the single entry
+   point; new checks fold into it, complexity nested in narrow-and-deep
+   helpers — no new top-level script without a recorded reason.

@@ -303,6 +303,21 @@ Status: `user said`
 - Preambles narrow authority/scope, never widen; hard constraints win over
   preambles; preambles are never committed.
 
+### 18. Session end leaves the toolbelt consolidated, fast, narrow-and-deep
+
+Status: `user said`
+
+At session end, the agent makes sure the setup/feedback scripts are
+**consolidated** (not too many — minimize cognitive complexity for the next
+agent) and **fast**. Complexity is nested in **narrow and deep**
+modules/scripts: small, simple entry points; depth hidden inside.
+
+- New capability folds into an existing entry point (flag/subcommand), not a
+  new top-level script. A fifth top-level command needs a recorded reason.
+- Slow checks are debt: the next agent runs them every session start.
+- The measure is the next agent's cognitive load, not this agent's
+  convenience.
+
 ---
 
 ## Artifact map (inferred from dump)
@@ -343,6 +358,7 @@ Status: `inferred` — filenames/shape stated or strongly implied
 | 2026-07-22 | Verification + safety gates are per-project-kind (backend/frontend/CLI/infra/devops/AI-agent), detected per package | User directed; matrix inferred | decided |
 | 2026-07-22 | README centers the harness-first thesis: strong models ≠ reliable execution | User stated | decided |
 | 2026-07-22 | AGENTS.md template gets a runtime PREAMBLE SLOT + coordinator delegation section (narrow-never-widen) | User stated | decided |
+| 2026-07-22 | Session end includes toolbelt consolidation: few + fast entry points; complexity in narrow-and-deep scripts | User stated | decided |
 
 ## Constraints & non-goals
 
