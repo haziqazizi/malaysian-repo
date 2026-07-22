@@ -20,14 +20,16 @@ and OpenAI have both shown exactly this). **Fix the harness first.**
 
 | The agent needs to… | Mechanism | What it is |
 |---|---|---|
-| **Orient** | `AGENTS.md` (≤200 lines) | The map of the world: what this is, the hard rules (each enforced), where deeper docs live, what to do at session start and end |
+| **Orient** | `AGENTS.md` (≤200 lines) | The map of the world: what this is, the hard rules (each enforced), where deeper docs live |
+| | Session-start checklist | In AGENTS.md: prove the machine is real before working — check green, read Progress.md, confirm the one active task. No init proof, no work |
 | | `archive/` + manifest | Every doc is accurate or archived — no stale docs poisoning fresh context |
 | **Act** | `bin/` scripts | setup / check / dev / logs — non-interactive, stable exit codes, one obvious place |
 | | Runbooks (skills) | Repeatable multi-step work written down, not rediscovered |
 | **Get feedback** | `bin/check` | The gate: green, or an actionable reason why not. Goes red when the repo itself drifts |
 | | Three validation layers | Static → tests → system-level proof, shaped to what the project *is*: browser evidence for frontend, plan-never-apply for infra, evals for AI agents |
 | | `QUALITY.md` | Per-module letter grades from evidence, not vibes |
-| **Resume** | `features.json` | Machine-readable feature state: behavior + verification command + state. A Definition of Done the next agent can run |
+| **Resume** | Session-end checklist | In AGENTS.md: leave it resumable — check green or failure recorded, state files updated, decisions logged, work committed |
+| | `features.json` | Machine-readable feature state: behavior + verification command + state. A Definition of Done the next agent can run |
 | | `Progress.md` | One task in flight (1 UP), an ordered queue, and the exact resume step if a session dies mid-work |
 | | Preamble slot | A coordinator delegating work inserts run-specific rules (subagent policy, budget, scope) at the top of the delegate's AGENTS.md view |
 
