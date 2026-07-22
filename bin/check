@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+# Self-enforcement gate: fails when any harness standard breaks (standard:
+# feedback → the repo's own check guards the harness too). Run from anywhere.
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+fail=0
+err() { printf 'FAIL: %s\n' "$*" >&2; fail=1; }
+SKILL=skills/setup-harness
+
+# --- 1. Required files exist -------------------------------------------------
+required_files=(
+  "$SKILL/SKILL.md"
+  "$SKILL/standards/instructions.md"
+  "$SKILL/standards/tools.md"
+  "$SKILL/standards/environment.md"
+  "$SKILL/standards/state.md"
+  "$SKILL/standards/feedback.md"
+  "$SKILL/kinds/backend.md"
+  "$SKILL/kinds/frontend.md"
+  "$SKILL/kinds/cli.md"
+  "$SKILL/kinds/infra.md"
+  "$SKILL/kinds/devops.md"
+  "$SKILL/kinds/ai-agent.md"
+  "$SKILL/references/working-styles.md"
+  "$SKILL/templates/AGENTS.md.tmpl"
+  "$SKILL/templates/Progress.md.tmpl"
+  "$SKILL/templates/features.schema.json"
+  "$SKILL/templates/QUALITY.md.tmpl"
+  "$SKILL/templates/ARCHIVE-MANIFEST.md.tmpl"
+  "README.md" "AGENTS.md" "principles.md" "features.json" "Progress.md"
+)
+for f in "${required_files[@]}"; do
+  [[ -f "$f" ]] || err "missing required file: $f"
+done
+
+# --- 2. SKILL.md: frontmatter, load-bearing content, line cap ----------------
+if [[ -f "$SKILL/SKILL.md" ]]; then
+  lines=$(wc -l < "$SKILL/SKILL.md" | tr -d ' ')
+  (( lines <= 120 )) || err "SKILL.md is $lines lines (cap 120 — depth belongs in standards/ or references/)"
+  grep -q '^name: setup-harness$' "$SKILL/SKILL.md" || err "SKILL.md frontmatter missing 'name: setup-harness'"
+  grep -q '^description:' "$SKILL/SKILL.md" || err "SKILL.md frontmatter missing description"
+  for phrase in bootstrap adapt reconcile fix-now report-only "never delete" "not verified" soak "doer"; do
+    grep -qi -- "$phrase" "$SKILL/SKILL.md" || err "SKILL.md lost load-bearing content: '$phrase'"
+  done
+fi
+
+# --- 3. Standards: What/Why/Verify/Fix in each -------------------------------
+for s in instructions tools environment state feedback; do
+  f="$SKILL/standards/$s.md"
+  [[ -f "$f" ]] || continue
+  for h in "## What" "## Why" "## Verify" "## Fix"; do
+    grep -q "^$h" "$f" || err "standards/$s.md missing section '$h'"
+  done
+done
+
+# --- 4. Kinds: Proof surface + Safety gates in each --------------------------
+for k in backend frontend cli infra devops ai-agent; do
+  f="$SKILL/kinds/$k.md"
+  [[ -f "$f" ]] || continue
+  grep -q "^## Proof surface" "$f" || err "kinds/$k.md missing '## Proof surface'"
+  grep -q "^## Safety gates" "$f" || err "kinds/$k.md missing '## Safety gates'"
+done
+
+# --- 5. AGENTS.md.tmpl: line cap + six required sections ---------------------
+tmpl="$SKILL/templates/AGENTS.md.tmpl"
+if [[ -f "$tmpl" ]]; then
+  tlines=$(wc -l < "$tmpl" | tr -d ' ')
+  (( tlines <= 200 )) || err "AGENTS.md.tmpl is $tlines lines (cap 200)"
+  for h in "## Project overview" "## Quick setup" "## Hard constraints" "## Topic docs" "## At session start" "## At session end"; do
+    grep -q "^$h" "$tmpl" || err "AGENTS.md.tmpl missing section '$h'"
+  done
+fi
+
+# --- 5b. QUALITY.md.tmpl: five fixed dimensions; Progress.md.tmpl sections ---
+q="$SKILL/templates/QUALITY.md.tmpl"
+if [[ -f "$q" ]]; then
+  for dim in "Verification passing" "Agent understandable" "Test stability" "Architecture boundaries" "Code conventions"; do
+    grep -q -- "$dim" "$q" || err "QUALITY.md.tmpl missing dimension '$dim'"
+  done
+fi
+p="$SKILL/templates/Progress.md.tmpl"
+if [[ -f "$p" ]]; then
+  for h in "## Active (max 1)" "## Queue" "## Done" "## Blocked"; do
+    grep -q "^$h" "$p" || err "Progress.md.tmpl missing section '$h'"
+  done
+fi
+
+# --- 5c. No stray files in standards/ or kinds/ ------------------------------
+scount=$(find "$SKILL/standards" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+[[ "$scount" == "5" ]] || err "standards/ has $scount md files (expected exactly 5)"
+kcount=$(find "$SKILL/kinds" -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+[[ "$kcount" == "6" ]] || err "kinds/ has $kcount md files (expected exactly 6)"
+
+# --- 6. Root AGENTS.md line cap ----------------------------------------------
+if [[ -f AGENTS.md ]]; then
+  alines=$(wc -l < AGENTS.md | tr -d ' ')
+  (( alines <= 200 )) || err "AGENTS.md is $alines lines (cap 200)"
+fi
+
+# --- 7. Schema parses; features.json validates (shape) + 1 UP ----------------
+if command -v python3 >/dev/null; then
+  python3 - <<'PY' || fail=1
+import json, sys
+
+def err(msg):
+    print(f"FAIL: {msg}", file=sys.stderr)
+    global bad; bad = True
+bad = False
+
+try:
+    schema = json.load(open("skills/setup-harness/templates/features.schema.json"))
+    props = schema["properties"]["features"]["items"]["properties"]
+    states = set(props["state"]["enum"])
+    required = set(schema["properties"]["features"]["items"]["required"])
+    assert {"id", "behavior", "verification", "state"} <= required
+except Exception as e:
+    err(f"features.schema.json invalid: {e}"); sys.exit(1)
+
+try:
+    data = json.load(open("features.json"))
+except Exception as e:
+    err(f"features.json does not parse: {e}"); sys.exit(1)
+
+feats = data.get("features")
+if not isinstance(feats, list) or not feats:
+    err("features.json: 'features' must be a non-empty array"); sys.exit(1)
+
+allowed_keys = set(props)
+active = 0
+for i, f in enumerate(feats):
+    missing = required - set(f)
+    if missing: err(f"features[{i}] missing {sorted(missing)}")
+    extra = set(f) - allowed_keys
+    if extra: err(f"features[{i}] has unknown keys {sorted(extra)}")
+    st = f.get("state")
+    if st not in states: err(f"features[{i}] invalid state: {st}")
+    if st == "active": active += 1
+    if st == "blocked" and not f.get("blocked_on"): err(f"features[{i}] blocked without blocked_on")
+    if st == "verified" and not f.get("verified_by"): err(f"features[{i}] verified without verified_by")
+if active > 1:
+    err(f"{active} features active — default is 1 UP")
+sys.exit(1 if bad else 0)
+PY
+else
+  err "python3 not found — cannot validate features.json"
+fi
+
+# --- 8. Standalone: no dependency on malaysian-engineering under skills/ -----
+if grep -rl "malaysian-engineering" "$SKILL" >/dev/null 2>&1; then
+  err "skills/ references malaysian-engineering — must stay standalone: $(grep -rl 'malaysian-engineering' "$SKILL" | tr '\n' ' ')"
+fi
+
+if (( fail )); then
+  echo "check: RED" >&2
+  exit 1
+fi
+echo "check: green"

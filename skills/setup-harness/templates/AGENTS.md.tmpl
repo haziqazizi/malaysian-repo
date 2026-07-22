@@ -1,0 +1,51 @@
+# {{PROJECT_NAME}}
+
+<!-- Hard cap: 200 lines. Route, don't encyclopedia. Every claim here must be
+     true; a stale claim is a bug. -->
+
+## Project overview
+
+{{ONE_PARAGRAPH: what this is, who it serves, project kind(s), working style}}
+
+## Quick setup
+
+```bash
+{{SETUP_COMMAND}}    # fresh clone → working environment, idempotent
+{{CHECK_COMMAND}}    # canonical verification gate
+{{DEV_COMMAND}}      # run it (omit if not applicable)
+{{LOGS_COMMAND}}     # see what it says (omit if not applicable)
+```
+
+## Hard constraints
+
+<!-- Only invariants with teeth (each has a test/lint/contract/rubric).
+     Lock what must stay true; do not micromanage implementation. -->
+
+- {{CONSTRAINT_1}} — enforced by {{ENFORCEMENT_1}}
+- {{CONSTRAINT_2}} — enforced by {{ENFORCEMENT_2}}
+
+## Topic docs
+
+<!-- Deep rules live there, not here. -->
+
+| Topic | Doc |
+|---|---|
+| {{TOPIC_1}} | {{PATH_1}} |
+| {{TOPIC_2}} | {{PATH_2}} |
+
+## At session start
+
+<!-- The init checklist: prove the machine is real before working. -->
+
+1. Run `{{CHECK_COMMAND}}` — must be green before any change.
+2. Read `Progress.md` — confirm the single active task (1 UP).
+3. Check `features.json` — exactly one feature `active`.
+4. {{EXTRA_INIT_STEP}}
+
+## At session end
+
+1. `{{CHECK_COMMAND}}` green, or the failure is recorded in Progress.md.
+2. Progress.md updated: what moved, what's next, exact resume step.
+3. features.json states updated (builder sets active/blocked/built — never
+   verified; that flip belongs to a fresh review).
+4. No stray files; temporary work cleaned or archived with a manifest row.

@@ -1,0 +1,24 @@
+# Quality
+
+<!-- Per-module letter grade on five fixed dimensions. Grades cite evidence
+     (commands, counts, artifacts) — never adjectives alone. Regrade when the
+     module changes, not on a calendar. -->
+
+## {{MODULE_NAME}} (Quality: {{A-F}})
+
+- Verification passing: {{Yes/Partial/No}} ({{EVIDENCE: command + result}})
+- Agent understandable: {{Yes/Difficult}} ({{EVIDENCE: e.g. soak-agent found X in Y min}})
+- Test stability: {{Stable/Unstable}} ({{EVIDENCE: N runs, M flakes}})
+- Architecture boundaries: {{Compliant/Violations present}} ({{EVIDENCE: enforcement check}})
+- Code conventions: {{Followed/Partially followed}} ({{EVIDENCE: lint result}})
+
+<!-- Example, filled:
+
+## Payment Module (Quality: C)
+
+- Verification passing: Partial (payment callback untested — `bin/check` skips it)
+- Agent understandable: Difficult (logic spread across 3 files; soak agent took 25 min to locate entry point)
+- Test stability: Unstable (2 flaky tests in 10 runs: pay.spec.ts:41, refund.spec.ts:12)
+- Architecture boundaries: Violations present (ui imports db directly; no lint rule)
+- Code conventions: Partially followed (14 lint warnings)
+-->

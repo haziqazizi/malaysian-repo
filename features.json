@@ -1,0 +1,36 @@
+{
+  "features": [
+    {
+      "id": "skill-scaffold",
+      "behavior": "The setup-harness skill exists and is complete: SKILL.md (3 modes, 5-subsystem walk, gates), five subsystem standards with what/why/verify/fix, six kind files with proof surfaces and safety gates, working-styles reference, and five templates including a features JSON schema.",
+      "verification": "./bin/check",
+      "state": "verified",
+      "verified_by": "fresh-context review agent a0c417dad9fc25002, 2026-07-22 — pass; docs/skill-outputs/me-review/20260722-scaffold-review.md"
+    },
+    {
+      "id": "self-check-teeth",
+      "behavior": "bin/check fails (non-zero, actionable message) when any harness standard breaks: missing files, line caps exceeded, lost load-bearing sections, invalid features.json, >1 active feature, or a malaysian-engineering dependency appearing under skills/.",
+      "verification": "./bin/check && ! (mv skills/setup-harness/kinds/cli.md /tmp/cli.md.bak && ./bin/check; rc=$?; mv /tmp/cli.md.bak skills/setup-harness/kinds/cli.md; exit $((1-rc>0?0:rc)))",
+      "state": "verified",
+      "verified_by": "fresh-context review agent a0c417dad9fc25002, 2026-07-22 — ran green + 2 red probes + restore; docs/skill-outputs/me-review/20260722-scaffold-review.md"
+    },
+    {
+      "id": "install-script",
+      "behavior": "A one-command installer symlinks skills/setup-harness into a host harness's skills directory and uninstalls with rm, leaving hosts byte-for-byte unchanged.",
+      "verification": "./bin/check && ./install.sh --project /tmp/fake-host && test -L /tmp/fake-host/.claude/skills/setup-harness",
+      "state": "planned"
+    },
+    {
+      "id": "soak-protocol",
+      "behavior": "A written fresh-agent soak protocol: task selection, stumble taxonomy, and how stumbles convert to repo-debt entries in the setup report.",
+      "verification": "./bin/check && test -f skills/setup-harness/references/soak-protocol.md",
+      "state": "planned"
+    },
+    {
+      "id": "first-real-commissioning",
+      "behavior": "setup-harness has been run end-to-end against one real target repo, producing docs/harness/setup-report.md there with one evidenced row per standard.",
+      "verification": "TARGET=<repo> sh -c 'test -f \"$TARGET/docs/harness/setup-report.md\" && grep -Eq \"met|fixed|skip: |blocked\" \"$TARGET/docs/harness/setup-report.md\"'",
+      "state": "planned"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "features.json — machine-readable feature state machine",
+  "description": "Each feature: behavior (what it does), verification (the command that proves it, shaped to the project kind's real proof surface), state. Builder may set planned/active/blocked/built; only a fresh-context review sets verified. Default 1 UP: at most one feature active.",
+  "type": "object",
+  "required": ["features"],
+  "additionalProperties": false,
+  "properties": {
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "behavior", "verification", "state"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Stable kebab-case identifier"
+          },
+          "behavior": {
+            "type": "string",
+            "minLength": 10,
+            "description": "What it does, as observable behavior — not implementation"
+          },
+          "verification": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Command that proves the behavior on the kind's real proof surface (not just 'tests pass')"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["planned", "active", "blocked", "built", "verified", "landed", "archived"],
+            "description": "planned → active → built → verified → landed. blocked from any working state. Only fresh review sets verified."
+          },
+          "blocked_on": {
+            "type": "string",
+            "description": "Required when state=blocked: the exact decision or dependency"
+          },
+          "verified_by": {
+            "type": "string",
+            "description": "Required when state=verified: reviewer + artifact/evidence pointer (never the builder)"
+          }
+        }
+      }
+    }
+  }
+}

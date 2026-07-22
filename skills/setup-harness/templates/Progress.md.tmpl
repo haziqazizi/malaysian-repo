@@ -1,0 +1,26 @@
+# Progress
+
+<!-- Durable state, not chat memory. Default 1 UP: one feature in-flight at a
+     time; a PR is just its delivery vehicle. Tasks are non-overlapping or
+     strictly sequential. -->
+
+## Active (max 1)
+
+- **{{FEATURE_ID}}** — {{ONE_LINE_GOAL}}
+  - Done when: {{CRITERION}} (verify: `{{VERIFICATION_COMMAND}}`)
+  - Now: {{CURRENT_STEP}}
+  - Resume: {{EXACT_NEXT_ACTION_IF_INTERRUPTED}}
+
+## Queue (ordered, non-overlapping)
+
+1. {{NEXT_FEATURE_ID}} — {{ONE_LINE}}
+2. {{NEXT_FEATURE_ID_2}} — {{ONE_LINE}}
+3. {{NEXT_FEATURE_ID_3}} — {{ONE_LINE}}
+
+## Done (most recent first)
+
+- {{DATE}} {{FEATURE_ID}} — {{OUTCOME}} (evidence: {{COMMAND_OR_ARTIFACT}})
+
+## Blocked
+
+- {{FEATURE_ID}} — blocked on {{EXACT_DECISION_OR_DEPENDENCY}}
