@@ -28,7 +28,7 @@ and OpenAI have both shown exactly this). **Fix the harness first.**
 | **Get feedback** | `bin/check` | The gate: green, or an actionable reason why not. Goes red when the repo itself drifts |
 | | Three validation layers | Static → tests → system-level proof, shaped to what the project *is*: browser evidence for frontend, plan-never-apply for infra, evals for AI agents |
 | | `QUALITY.md` | Per-module letter grades from evidence, not vibes |
-| **Resume** | Session-end checklist | In AGENTS.md: leave it resumable — check green or failure recorded, state files updated, decisions logged, work committed |
+| **Resume** | Session-end checklist | In AGENTS.md: leave it resumable — check green or failure recorded, state files updated, decisions logged, work committed, toolbelt left consolidated and fast for the next agent |
 | | `features.json` | Machine-readable feature state: behavior + verification command + state. A Definition of Done the next agent can run |
 | | `Progress.md` | One task in flight (1 UP), an ordered queue, and the exact resume step if a session dies mid-work |
 | | Preamble slot | A coordinator delegating work inserts run-specific rules (subagent policy, budget, scope) at the top of the delegate's AGENTS.md view |
