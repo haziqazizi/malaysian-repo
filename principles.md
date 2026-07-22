@@ -425,3 +425,8 @@ User dump (normalized spelling in principles above):
   feature in-flight (principle 4).
 - User: consider verifiability + safety per project kind (infra, devops,
   frontend, backend, CLI, AI agent). Matrix captured as principle 15.
+- User reframed README simply: a good repo = agent can **orient** (map of
+  the world), **act** (straightforward tools/scripts + runbooks/skills),
+  **get feedback** on results, and **resume** where others left off
+  (willingly or unwillingly) — via a couple of mechanisms. README rewritten
+  around orient/act/feedback/resume with a mechanisms table.
