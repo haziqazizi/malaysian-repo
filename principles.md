@@ -268,6 +268,41 @@ Consequences:
   flags (CLI), plan-only creds (infra), protected CI config (devops), budget
   caps + un-gameable graders (agents).
 
+### 16. Core thesis: strong models ≠ reliable execution — fix the harness first
+
+Status: `user said`
+
+The README's center of gravity. Reliable execution toward a task, by humans
+or AIs, comes from the harness, not the model. Evidence (user-supplied
+lecture): SWE-bench ~50–60% on curated tasks, worse on real ones; Anthropic
+same-model experiment (bare: $9/20min/broken vs harnessed: $200/6h/working);
+OpenAI: well-harnessed repo takes Codex "unreliable" → "reliable";
+million-line experiment (3 engineers, 0 hand-written lines, 1,500 PRs/5mo).
+
+Rules: when things fail, check the harness before blaming the model.
+Attribute every failure to a layer (task spec, context, environment,
+verification, session state — maps onto the 5 subsystems). Diagnostic loop:
+execute → observe → attribute → fix layer → never fail that way again.
+Definition of Done = conditions verifiable by command. One AGENTS.md can
+beat a model upgrade.
+
+Key terms adopted: capability gap, harness, harness-induced failure,
+verification gap, diagnostic loop, definition of done, context anxiety.
+
+### 17. AGENTS.md carries a runtime delegation preamble
+
+Status: `user said`
+
+- AGENTS.md (the template) has a PREAMBLE SLOT at top: empty when committed;
+  a coordinating agent inserts run-specific instructions at runtime when
+  delegating; the delegate reads it first.
+- Bottom section addresses coordinators: when delegating, insert a preamble
+  with anything the delegate must know — e.g. "don't spawn subagents",
+  "use a workflow", "decompose recursively into the smallest unit", budget,
+  scope, forbidden actions, report-back format.
+- Preambles narrow authority/scope, never widen; hard constraints win over
+  preambles; preambles are never committed.
+
 ---
 
 ## Artifact map (inferred from dump)
@@ -306,6 +341,8 @@ Status: `inferred` — filenames/shape stated or strongly implied
 | 2026-07-22 | Monorepo matrix: AGENTS.md + check always per package; features.json/Progress.md only if independently shipped | User accepted rec | decided |
 | 2026-07-22 | 1 UP = one feature from features.json in-flight; PR is the delivery vehicle | User accepted rec | decided |
 | 2026-07-22 | Verification + safety gates are per-project-kind (backend/frontend/CLI/infra/devops/AI-agent), detected per package | User directed; matrix inferred | decided |
+| 2026-07-22 | README centers the harness-first thesis: strong models ≠ reliable execution | User stated | decided |
+| 2026-07-22 | AGENTS.md template gets a runtime PREAMBLE SLOT + coordinator delegation section (narrow-never-widen) | User stated | decided |
 
 ## Constraints & non-goals
 

@@ -67,9 +67,11 @@ tmpl="$SKILL/templates/AGENTS.md.tmpl"
 if [[ -f "$tmpl" ]]; then
   tlines=$(wc -l < "$tmpl" | tr -d ' ')
   (( tlines <= 200 )) || err "AGENTS.md.tmpl is $tlines lines (cap 200)"
-  for h in "## Project overview" "## Quick setup" "## Hard constraints" "## Topic docs" "## At session start" "## At session end"; do
+  for h in "## Project overview" "## Quick setup" "## Hard constraints" "## Topic docs" "## At session start" "## At session end" "## Delegating to another agent"; do
     grep -q "^$h" "$tmpl" || err "AGENTS.md.tmpl missing section '$h'"
   done
+  grep -q "PREAMBLE SLOT" "$tmpl" || err "AGENTS.md.tmpl missing the runtime PREAMBLE SLOT"
+  grep -q "never widen" "$tmpl" || err "AGENTS.md.tmpl delegation section lost the narrow-never-widen rule"
 fi
 
 # --- 5b. QUALITY.md.tmpl: five fixed dimensions; Progress.md.tmpl sections ---

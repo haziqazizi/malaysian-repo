@@ -1,35 +1,61 @@
 # malaysian-harness
 
-**Most repos are hostile territory.** Setup takes an afternoon of archaeology.
-The docs lie. Tests pass locally and fail in CI. Three TODO files contradict
-each other. A fresh AI agent walks in, reads a stale README, and confidently
-breaks production.
+**Reliable execution toward a task — by humans or AIs.**
 
-`setup-harness` is one command that turns that repo into a place where humans
-and AI agents actually *want* to work.
+Strong models don't mean reliable execution. As of late 2025, the strongest
+coding agents hit roughly 50–60% on SWE-bench Verified — and those are
+curated tasks with clear issues and ready-made tests. Hand the same agent
+your everyday work — vague specs, no tests, business rules living in one
+teammate's head and a Slack thread from March — and it runs for 20 minutes,
+says "all done," and you find it added the feature, broke the tests, and
+built the wrong thing anyway.
 
-## The idea
+Most people's first reaction: "the model isn't good enough — let me pay for
+a bigger one." Put the wallet away.
 
-A repo is a harness for whoever works in it — and a harness has exactly
-**five subsystems**. Miss one and everything downstream gets weird:
+## Same horse, different tack
 
-| Subsystem | The question it answers | Without it |
+Anthropic ran a controlled experiment: same prompt, same model (Opus 4.5),
+two runs. Bare, no support: 20 minutes, $9, core features broken. Full
+harness — planner, generator, evaluator: 6 hours, $200, fully working.
+**They didn't change the model. They changed the tack.** OpenAI's harness
+engineering write-up says it bluntly: a well-harnessed repo takes Codex from
+"unreliable" straight to "reliable" — a qualitative leap, not a bit better.
+Their million-line experiment (three engineers, zero hand-written code,
+1,500 PRs in five months) found every failure came down to one question:
+*what is the agent still missing, and can it be supplied in a way that's
+understandable and executable?*
+
+**Harness** = everything outside the model weights. If it's not weights,
+it's harness. And when things fail: **fix the harness first, then blame the
+model.** If the same model succeeds on well-structured tasks, it's a harness
+problem.
+
+## Where agents actually get stuck
+
+Five failure modes. Five subsystems. `setup-harness` installs the fix for
+each:
+
+| Failure mode | Subsystem | What gets installed |
 |---|---|---|
-| **Instructions** | What is this? What are the rules? | Agents obey docs that stopped being true in March |
-| **Tools** | What can I run? | Every session starts with archaeology |
-| **Environment** | Does this machine even work? | "Works on my machine" forever |
-| **State** | What's in flight? What's next? | Progress dies with the chat window |
-| **Feedback** | Was that actually good? | "Done" means "compiled" |
+| Vague requirements — the agent guesses | **State** | `features.json`: every feature = behavior + verification command + state. A Definition of Done the agent can run, not vibe |
+| Implicit conventions — the agent has never seen the rule | **Instructions** | `AGENTS.md` ≤200 lines: stack, hard constraints (each with teeth), topic docs. The rule leaves your head and enters the repo |
+| Broken environment — context burned on `pip install` | **Environment** | One-command setup + a session-start init checklist that *proves* the machine works before work starts |
+| No way to run anything | **Tools** | setup / check / dev / logs — non-interactive, stable exit codes, one obvious place |
+| "Done when it feels done" — the verification gap | **Feedback** | Three validation layers, kind-shaped: browser evidence for frontend, plan-never-apply for infra, statistical evals for AI agents. Plus a check with teeth |
+| Cross-session amnesia — every session re-explores | **State** | `Progress.md` + exact resume steps. Progress lives in files, not chat windows |
 
-`setup-harness` installs all five — shaped to what the project *is* (backend,
-frontend, CLI, infra, devops, AI agent) and how it *ships* (deploy-to-prod,
-work-in-prod, trunk-and-flags, release trains…). A frontend gets browser
-evidence, not vibes. Infra gets plan-never-apply, not YOLO. An AI agent
-project gets statistical evals and budget caps, not a prayer.
+Miss any subsystem and everything downstream gets weird. That's the whole
+diagnostic loop: execute → observe failure → attribute it to a layer → fix
+that layer → never fail that way again. "The model isn't good enough"
+should appear less and less in your logs.
+
+One `AGENTS.md` can beat a model upgrade. That is not a joke — it's the
+highest-ROI move in harness engineering, and it's this skill's first move.
 
 ## One command, three moods
 
-| You point it at | It | 
+| You point it at | It |
 |---|---|
 | An empty folder | **Bootstraps** a fresh harness from templates |
 | A crusty existing repo | **Adapts**: inventory → morph → archive the confusing stuff |
@@ -37,25 +63,27 @@ project gets statistical evals and budget caps, not a prayer.
 
 Detected from disk — it never asks what it can figure out. Idempotent —
 re-running it *is* the health check. And it **archives, never deletes**:
-every confusing doc moves to `archive/` with a manifest row saying what,
-why, when. Reversible by design.
+confusing docs move to `archive/` with a manifest row (what, why, when).
 
 ## Opinions, held strongly
 
-- **The doer is never the grader.** Builders mark work `built`. Only a
-  fresh-context review — different agent, refuting stance — flips it to
-  `verified`. This repo's own features went through exactly that gate.
-- **Confidence is not evidence.** Every claim cites a command run *this
-  session*, or it's `not verified`. Docs saying so counts for nothing.
-- **1 UP.** One feature in flight at a time. A PR is a delivery vehicle,
-  not a unit of progress.
-- **Every doc is accurate or archived.** There is no third state. Stale
-  docs don't just rot — they poison every fresh context that reads them.
+- **The doer is never the grader.** Builders mark work `built`; only a
+  fresh-context, refuting-stance review flips it to `verified`. This repo's
+  own features went through that gate.
+- **Confidence is not evidence.** Every claim cites a command run this
+  session, or it's `not verified`. The agent's "I'm done" is the single most
+  common lie in the business.
+- **1 UP.** One feature in flight. A PR is a delivery vehicle, not progress.
+- **Every doc is accurate or archived.** No third state. Stale docs poison
+  every fresh context that reads them.
 - **Constraints need teeth.** An architecture rule without a test, lint,
   contract, or rubric is a wish.
-- **The acceptance test is a stranger.** Setup isn't done when the setup
-  agent says so — it's done when a *fresh* agent survives a real task and a
-  newcomer is productive in under 10 minutes.
+- **The acceptance test is a stranger.** Done = a fresh agent survives a
+  real task and a newcomer is productive in under 10 minutes.
+- **Coordinators write preambles.** When one agent delegates to another,
+  run-specific rules (subagent policy, budget, scope) get inserted at the
+  top of the delegate's AGENTS.md view — see the template's delegation
+  section.
 
 ## It enforces itself
 
@@ -63,11 +91,10 @@ why, when. Reversible by design.
 ./bin/check   # green, or an actionable reason why not
 ```
 
-This repo eats its own harness: `AGENTS.md` (capped at 200 lines — enforced),
-`features.json` (schema-validated, 1 UP — enforced), `Progress.md`, and a
-check that goes **red** if a standard file loses its teeth, a second feature
-sneaks into flight, or anything under `skills/` grows a dependency. Proven
-red on purpose, three ways, before the first commit.
+This repo eats its own harness: capped AGENTS.md, schema-validated
+features.json, 1 UP enforced, and a check that goes **red** if a standard
+loses its teeth, a second feature sneaks into flight, or `skills/` grows a
+dependency. Proven red on purpose, three ways, before the first commit.
 
 ## Layout
 
@@ -91,15 +118,13 @@ invoke `setup-harness` in the target repo. Nothing it installs references
 this repo — uninstalling is a no-op for the host. Standalone, small,
 opinionated.
 
-## Develop it
+## Further reading
 
-```bash
-./bin/check   # keep it green
-```
-
-Doctrine changes start life in `principles.md`, then land in the skill.
-Several disciplines here are sharpened versions of ideas from the author's
-ME system — deliberately reimplemented, zero dependency.
+- OpenAI — *Harness Engineering: Leveraging Codex in an Agent-First World*
+- Anthropic — *Effective Harnesses for Long-Running Agents*
+- HumanLayer — *Skill Issue: Harness Engineering for Coding Agents*
+- SWE-bench Verified leaderboard
+- Thoughtworks Technology Radar — *Harness Engineering*
 
 ---
 

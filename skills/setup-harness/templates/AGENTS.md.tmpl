@@ -3,6 +3,12 @@
 <!-- Hard cap: 200 lines. Route, don't encyclopedia. Every claim here must be
      true; a stale claim is a bug. -->
 
+<!-- PREAMBLE SLOT — empty in the committed file. A coordinating agent that
+     delegates work into this repo inserts run-specific instructions here at
+     runtime; a delegate reads this before everything below. Committed
+     content never lives in this slot. -->
+{{PREAMBLE}}
+
 ## Project overview
 
 {{ONE_PARAGRAPH: what this is, who it serves, project kind(s), working style}}
@@ -49,3 +55,20 @@
 3. features.json states updated (builder sets active/blocked/built — never
    verified; that flip belongs to a fresh review).
 4. No stray files; temporary work cleaned or archived with a manifest row.
+
+## Delegating to another agent
+
+If you are a coordinator handing work to a delegate, insert a preamble into
+the PREAMBLE SLOT at the top of the delegate's view of this file, carrying
+anything the delegate must know that this committed file cannot. Examples:
+
+- Subagent policy: "do not spawn subagents" / "use a workflow" /
+  "decompose recursively into the smallest verifiable units"
+- Budget: max steps, tokens, time, or spend for this run
+- Scope: exact files/paths in bounds; everything else read-only
+- Forbidden actions this run (no commits, no installs, no network, …)
+- Report-back format and where evidence must land
+
+Rules: the preamble may narrow authority and scope, never widen them; it
+never contradicts Hard constraints above (constraints win); it is
+run-specific and never committed.
