@@ -32,21 +32,30 @@
 
 ## Topic docs
 
-<!-- Deep rules live there, not here. -->
+<!-- Deep rules live there, not here. At most 5 choices per hop; at most
+     3 hops from this file to any answer. Provider specifics stay behind
+     one adapter plus one leaf doc — never in this table's routers. -->
 
 | Topic | Doc |
 |---|---|
 | {{TOPIC_1}} | {{PATH_1}} |
 | {{TOPIC_2}} | {{PATH_2}} |
+| Session start / end | {{SESSIONS_ROUTER}} |
+| Friction / papercuts | {{PAPERCUTS_LOG}} |
 
 ## At session start
 
-<!-- The init checklist: prove the machine is real before working. -->
+<!-- The init checklist: prove the machine is real before working.
+     Full version: {{SESSIONS_ROUTER}} -->
 
-1. Run `{{CHECK_COMMAND}}` — must be green before any change.
-2. Read `Progress.md` — confirm the single active task (1 UP).
-3. Check `features.json` — exactly one feature `active`.
-4. {{EXTRA_INIT_STEP}}
+1. Read the local preamble if one exists, then run `{{READINESS_COMMAND}}`
+   — it composes the host preflight; obey its result before any change.
+2. Confirm durable state: the active row for **your worker** (WIP = 1 per
+   worker), its next action, and its blockers.
+3. Claim one row or none. A row is required only when the work outlives
+   this session.
+4. Resuming a row? Re-run its verification command first.
+5. {{EXTRA_INIT_STEP}}
 
 ## At session end
 
@@ -55,7 +64,14 @@
 3. features.json states updated (builder sets active/blocked/built — never
    verified; that flip belongs to a fresh review).
 4. No stray files; temporary work cleaned or archived with a manifest row.
-5. Toolbelt consolidated for the next agent: entry points still few and
+5. Left it fast (timings within recorded bounds — two warm runs over means
+   fix or log, never a silently raised bound) and startable (readiness
+   passes, no stray processes).
+6. This session's papercuts eliminated: every entry you added to
+   {{PAPERCUTS_LOG}} is fixed (trivial and safe) or converted to a row
+   (not trivial), and closed. One pre-existing entry on your surfaces
+   attempted. Session start and end are the only cleanup mechanisms.
+7. Toolbelt consolidated for the next agent: entry points still few and
    fast; anything new folded into an existing command (flag/subcommand),
    complexity nested in narrow-and-deep helpers — never a new top-level
    script without a recorded reason.

@@ -1,0 +1,39 @@
+# Session start
+
+<!-- Render into the repo (e.g. docs/sessions/start.md) and link it from
+     AGENTS.md "At session start". Four steps, in order. Obey the check;
+     do not reason around it. -->
+
+1. **Read the local preamble.** If `{{PREAMBLE_DIR}}` exists, read every
+   file in it first. It is uncommitted, session-specific context. If it is
+   absent, there is nothing to read and nothing to create.
+2. **Run the readiness command and obey it.**
+
+   ```bash
+   {{READINESS_COMMAND}}    # composes the host preflight, then repo steps
+   ```
+
+   Green: continue. Red: fix the named prerequisite, or stop and report it.
+   A red readiness result is never a reason to start editing.
+3. **Claim one row, or none.** WIP = 1 per worker. Put your worker name on
+   the row you claim. Reading and investigation need no row (survivorship
+   rule: a row is for work that outlives this session).
+4. **Resuming a row? Re-run its verification first.**
+
+   ```bash
+   {{ROW_VERIFICATION_COMMAND}}
+   ```
+
+   Know the real state before you edit. The last session's note is a claim,
+   not evidence.
+
+## Low on context
+
+Stop. Checkpoint. Hand off.
+
+1. WIP commit — the work in progress is on disk, not in this session.
+2. Update the row: current state, next steps, blockers.
+3. Write the resume note: the exact next action, in one command or sentence.
+
+Never rush the finish on a thin context. A clean stop is cheaper than a
+half-finished change the next agent must reconstruct.

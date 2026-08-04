@@ -1,0 +1,52 @@
+# Session end
+
+<!-- Render into the repo (e.g. docs/sessions/end.md) and link it from
+     AGENTS.md "At session end". Five blocks. Each block is done or
+     recorded — there is no third state. -->
+
+## 1. The gate
+
+```bash
+{{CHECK_COMMAND}}
+```
+
+Green, or the failure is recorded with the exact next action. A skipped
+relevant check is named and explained.
+
+## 2. Leave it fast
+
+Compare this session's timings with the recorded bounds in
+`{{PERFORMANCE_DOC}}`. Two warm runs above a bound means fix the cause or
+log a papercut. Never raise the recorded bound to make the run pass.
+
+## 3. Leave it startable
+
+- `{{READINESS_COMMAND}}` passes from a clean shell.
+- Every row you touched names its exact next action.
+- No stray processes, servers, ports, or temporary files left behind.
+
+## 4. Leave the map true
+
+- Routers list what exists — nothing missing, nothing dead.
+- One owner per fact. A fact repeated in two docs is a bug.
+- Plain sentences. Short, active, one idea each.
+
+## 5. Eliminate this session's papercuts
+
+Append new friction to `{{PAPERCUTS_LOG}}` while you work. Entries are
+stateless: no status, no owner.
+
+**No entry you added may survive this session as a raw log entry.** Give
+each one an exit before you stop:
+
+- **Trivial and safe** — ≤15 minutes, one surface, no schema, money, or
+  auth: fix it now and close the entry.
+- **Not trivial** — write a feature row, or a blocked row that names its
+  exact gate. Then close the entry.
+
+Also attempt at least one pre-existing entry that touches the surfaces you
+worked on. A future run must never hit a papercut this session could have
+removed.
+
+Session start and session end are the only cleanup mechanisms. There is no
+periodic sweep, so these five blocks must be enough on their own.
