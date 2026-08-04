@@ -2,7 +2,10 @@
 
 ## Active (max 1)
 
-- (none — next up: self-check-teeth follow-ups or install-script; owner picks)
+- **field-upgrades-2026-08** — fold the field-deployment upgrades into the five standards
+  - Done when: `./bin/check` green and every new rule has a check (verify: `./bin/check`)
+  - Now: built; PR open on `feat/harness-2026-08-upgrades`
+  - Resume: fresh-context review of the PR flips the row to `verified`
 
 ## Queue (ordered, non-overlapping)
 
