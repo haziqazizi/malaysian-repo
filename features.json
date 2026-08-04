@@ -31,6 +31,12 @@
       "behavior": "setup-harness has been run end-to-end against one real target repo, producing docs/harness/setup-report.md there with one evidenced row per standard.",
       "verification": "TARGET=<repo> sh -c 'test -f \"$TARGET/docs/harness/setup-report.md\" && grep -Eq \"met|fixed|skip: |blocked\" \"$TARGET/docs/harness/setup-report.md\"'",
       "state": "planned"
+    },
+    {
+      "id": "field-upgrades-2026-08",
+      "behavior": "The five standards carry the 2026-08 field upgrades from the monorepo field deployment: closed-set docs structure with routing limits, the two-interface waterline, provider modularity and rule provenance (instructions); the survivorship rule and per-worker WIP with per-row state accepted instead of Progress.md (state); the stateless papercuts queue that must be empty of this session's entries at session end, the five session-end blocks, and the weak-model soak (feedback); host-policy composition, structural environment detection, the session-start template, the low-on-context protocol, and per-package lock files (environment). bin/check fails when any of these rules is edited out, and templates/session-start.md.tmpl plus templates/session-end.md.tmpl exist.",
+      "verification": "./bin/check",
+      "state": "built"
     }
   ]
 }

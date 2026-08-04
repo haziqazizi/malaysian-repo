@@ -28,6 +28,8 @@ required_files=(
   "$SKILL/templates/features.schema.json"
   "$SKILL/templates/QUALITY.md.tmpl"
   "$SKILL/templates/ARCHIVE-MANIFEST.md.tmpl"
+  "$SKILL/templates/session-start.md.tmpl"
+  "$SKILL/templates/session-end.md.tmpl"
   "README.md" "AGENTS.md" "principles.md" "features.json" "Progress.md"
 )
 for f in "${required_files[@]}"; do
@@ -75,6 +77,40 @@ if [[ -f "$tmpl" ]]; then
   grep -q "narrow-and-deep" "$tmpl" || err "AGENTS.md.tmpl session-end lost the toolbelt-consolidation item"
 fi
 grep -q "narrow and deep" "$SKILL/standards/tools.md" 2>/dev/null || err "standards/tools.md lost the narrow-and-deep rule"
+
+# --- 5a2. Standards keep the 2026-08 field rules ------------------------------
+# Each pair: file → phrase that must survive an edit (rule has a check, not
+# only prose).
+check_phrase() { grep -qi -- "$2" "$SKILL/standards/$1.md" 2>/dev/null || err "standards/$1.md lost the rule: '$2'"; }
+check_phrase instructions "Closed-set docs structure"
+check_phrase instructions "3 hops"
+check_phrase instructions "Two-interface waterline"
+check_phrase instructions "provenance"
+check_phrase state "Survivorship rule"
+check_phrase state "per worker"
+check_phrase feedback "papercut"
+check_phrase feedback "Session-end blocks"
+check_phrase feedback "Weak-model soak"
+check_phrase environment "host preflight"
+check_phrase environment "structural"
+check_phrase environment "Low-on-context"
+# Monorepo audit: lock files are per package, durable state may be per row.
+grep -qi "per package" "$SKILL/standards/environment.md" 2>/dev/null || err "standards/environment.md lost the per-package lock file rule"
+grep -qi "substitute for \`Progress.md\`" "$SKILL/standards/state.md" 2>/dev/null || err "standards/state.md lost the per-row-state substitute for Progress.md"
+
+# --- 5a3. Session templates carry their blocks -------------------------------
+ss="$SKILL/templates/session-start.md.tmpl"
+if [[ -f "$ss" ]]; then
+  for phrase in preamble readiness "one row" "verification" "Low on context"; do
+    grep -qi -- "$phrase" "$ss" || err "session-start.md.tmpl missing step: '$phrase'"
+  done
+fi
+se="$SKILL/templates/session-end.md.tmpl"
+if [[ -f "$se" ]]; then
+  for phrase in "The gate" "Leave it fast" "Leave it startable" "Leave the map true" "Eliminate this session's papercuts"; do
+    grep -q -- "$phrase" "$se" || err "session-end.md.tmpl missing block: '$phrase'"
+  done
+fi
 
 # --- 5b. QUALITY.md.tmpl: five fixed dimensions; Progress.md.tmpl sections ---
 q="$SKILL/templates/QUALITY.md.tmpl"

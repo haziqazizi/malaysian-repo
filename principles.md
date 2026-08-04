@@ -359,6 +359,18 @@ Status: `inferred` — filenames/shape stated or strongly implied
 | 2026-07-22 | README centers the harness-first thesis: strong models ≠ reliable execution | User stated | decided |
 | 2026-07-22 | AGENTS.md template gets a runtime PREAMBLE SLOT + coordinator delegation section (narrow-never-widen) | User stated | decided |
 | 2026-07-22 | Session end includes toolbelt consolidation: few + fast entry points; complexity in narrow-and-deep scripts | User stated | decided |
+| 2026-08-04 | `docs/` is a closed set: five noun routers + machine dirs + data files; new router needs owner approval | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Routing limits: ≤5 choices per hop, ≤3 hops to any answer; root entry file 50–200 lines | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Two-interface waterline: agent interface = 3 reads, few verbs, obey the failing check; prose-only rules are the exception | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Provider specifics live behind one adapter + one leaf doc; routers stay provider-free | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Every MUST / MUST NOT line carries a `why:` or `source:` note | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Survivorship rule: a row exists only when the work outlives the session | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Fleet scale: WIP = 1 per worker; per-row state may replace `Progress.md` — the function is required, the filename is not | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Papercuts are stateless and must not survive the session that logged them: fix if trivial and safe, else convert to a row | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Session start and session end are the only cleanup mechanisms — no periodic sweep | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Acceptance = weak-model soak: a fresh low-capability agent completes a starter task on the docs alone | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Readiness composes host policy and names no provider; environment detection is structural, never name-string | monorepo field deployment, 2026-08 | decided |
+| 2026-08-04 | Lock files are per package in a monorepo; a root lock file is one layout, not the requirement | monorepo field deployment, 2026-08 | decided |
 
 ## Constraints & non-goals
 
