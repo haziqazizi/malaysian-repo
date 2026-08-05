@@ -36,7 +36,8 @@
       "id": "field-upgrades-2026-08",
       "behavior": "The five standards carry the 2026-08 field upgrades from the monorepo field deployment: closed-set docs structure with routing limits, the two-interface waterline, provider modularity and rule provenance (instructions); the survivorship rule and per-worker WIP with per-row state accepted instead of Progress.md (state); the stateless papercuts queue that must be empty of this session's entries at session end, the five session-end blocks, and the weak-model soak (feedback); host-policy composition, structural environment detection, the session-start template, the low-on-context protocol, and per-package lock files (environment). bin/check fails when any of these rules is edited out, and templates/session-start.md.tmpl plus templates/session-end.md.tmpl exist.",
       "verification": "./bin/check",
-      "state": "built"
+      "state": "verified",
+      "verified_by": "fresh-context review agent (Claude Fable 5, session 6b482acc-b2ac-4cd7-9062-233950d5f060), 2026-08-05 — pass; docs/skill-outputs/me-review/20260805-field-upgrades-review.md"
     }
   ]
 }
