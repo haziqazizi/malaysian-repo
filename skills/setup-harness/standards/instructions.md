@@ -22,6 +22,27 @@ in it.
   Every doc is a router `README.md` or is listed in its router's README. A
   new router needs owner approval. why: a closed set turns "where does this
   go?" into a lookup. source: monorepo field deployment, 2026-08.
+- **Domain glossary.** When the repo names domain concepts, a glossary owns
+  them: root `CONTEXT.md`, routed from the root entry file's Topic docs.
+  One canonical term per concept, a one-or-two-sentence definition of what
+  it **is**, losing synonyms under `_Avoid_`, no implementation detail,
+  domain concepts only — never general programming vocabulary. why: two
+  words for one concept makes agents treat one thing as two. source:
+  mattpocock/skills domain-modeling adoption, 2026-08.
+- **Decision records.** Hard-to-reverse choices live under the architecture
+  router as numbered records, one to three sentences each, written only
+  when all three hold: hard to reverse, surprising without context, a real
+  trade-off. Supersession is append-only: a term moves to `_Avoid_`, a
+  record gains `superseded by NNNN`; neither is rewritten. One owner per
+  fact: the glossary owns what a term means, a record owns why a one-way
+  choice was made; a papercut that turns out to be a deliberate choice
+  converts to a record pointer, not a fix. why: an agent that "fixes" a
+  deliberate choice undoes a decision silently; a record is the only
+  durable veto. source: mattpocock/skills domain-modeling adoption,
+  2026-08.
+- Both files are created lazily — the first real entry creates the file and
+  registers it in its router in the same change. why: an empty glossary
+  trains agents to ignore it.
 - **Routing limits**: at most 5 choices per hop, at most 3 hops from the root
   entry file to any answer. why: an agent that reads more than 3 files to
   find a rule stops reading. source: monorepo field deployment, 2026-08.
@@ -68,6 +89,13 @@ into an owned slot or out of the repo.
   leaf doc is a gap.
 - Sample 5 random docs: each matches current code or sits in `archive/` with
   a manifest row.
+- If `CONTEXT.md` exists: sample 3 entries — each has one canonical term, a
+  definition of at most two sentences, an `_Avoid_` list, and no
+  implementation detail. Grep recently added identifiers for an avoided
+  synonym: a hit is a gap.
+- If decision records exist: sample 3 — each states a hard-to-reverse,
+  surprising trade-off; a record edited in place instead of superseded is a
+  gap.
 
 ## Fix
 
@@ -82,3 +110,9 @@ into an owned slot or out of the repo.
 - New router requested: stop and ask the owner.
 - Stale doc: archive pass (SKILL.md step 5) — move + manifest row, never
   delete.
+- Term with two meanings: pin one canonical term, move the rest to
+  `_Avoid_`, and note the resolved ambiguity in the glossary.
+- Papercut that records a deliberate choice: convert it to a decision
+  record and close the papercut with a pointer.
+- Empty glossary or record scaffold: archive it; recreate on the first real
+  entry.

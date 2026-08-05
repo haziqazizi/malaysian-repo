@@ -38,6 +38,12 @@
       "verification": "./bin/check",
       "state": "verified",
       "verified_by": "fresh-context review agent (Claude Fable 5, session 6b482acc-b2ac-4cd7-9062-233950d5f060), 2026-08-05 — pass; docs/skill-outputs/me-review/20260805-field-upgrades-review.md"
+    },
+    {
+      "id": "domain-language",
+      "behavior": "The instructions standard owns domain language and decisions: a root CONTEXT.md glossary rule (one canonical term, _Avoid_ list, no implementation detail), numbered decision records under the architecture router gated on hard-to-reverse + surprising + real trade-off, append-only supersession, one-owner-per-fact boundaries against the papercut log, lazy file creation, and matching Verify and Fix entries.",
+      "verification": "./bin/check && grep -q 'Domain glossary' skills/setup-harness/standards/instructions.md && grep -q 'Decision records' skills/setup-harness/standards/instructions.md",
+      "state": "built"
     }
   ]
 }

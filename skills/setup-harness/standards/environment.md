@@ -29,7 +29,8 @@ The subsystem that makes the repo runnable, provably, before any work starts.
   rushed finish costs the next session more than a clean stop.
   source: monorepo field deployment, 2026-08.
 - Required env vars documented without printing secrets.
-- Dependencies are installed from locked manifests. In a monorepo the lock
+- Dependencies are installed from locked manifests. source: principles.md
+  decision, 2026-08-04. In a monorepo the lock
   files live per package (`api/Gemfile.lock`, `app/pubspec.lock`,
   `web/package-lock.json`, …); a repo root lock file is one valid layout,
   not the required one.
