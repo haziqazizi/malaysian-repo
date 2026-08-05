@@ -458,3 +458,10 @@ User dump (normalized spelling in principles above):
   **get feedback** on results, and **resume** where others left off
   (willingly or unwillingly) — via a couple of mechanisms. README rewritten
   around orient/act/feedback/resume with a mechanisms table.
+- 2026-08-05: Domain language and decisions get owned slots (from the
+  mattpocock/skills domain-modeling adoption): root `CONTEXT.md` glossary
+  (canonical term + _Avoid_, no implementation detail), numbered decision
+  records under the architecture router gated on hard-to-reverse +
+  surprising + real trade-off, append-only supersession, papercut-to-record
+  conversion, lazy creation. One owner per fact keeps glossary, records,
+  and papercuts disjoint.

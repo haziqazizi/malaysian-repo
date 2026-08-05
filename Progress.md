@@ -2,14 +2,16 @@
 
 ## Active (max 1)
 
-- (none)
+- **domain-language** — glossary + decision-record standard in instructions
+  - Done when: `./bin/check` green and the new rules carry why/source notes with Verify and Fix entries (verify: feature's verification command)
+  - Now: built; PR open on `feat/domain-language`
+  - Resume: fresh-context review of the PR flips the row to `verified`
 
 ## Queue (ordered, non-overlapping)
 
-1. domain-language — glossary + decision-record standard in instructions (requested 2026-08-05)
-2. install-script — symlink installer + uninstall = rm
-3. soak-protocol — written fresh-agent soak procedure
-4. first-real-commissioning — run against one real repo
+1. install-script — symlink installer + uninstall = rm
+2. soak-protocol — written fresh-agent soak procedure
+3. first-real-commissioning — run against one real repo
 
 ## Done (most recent first)
 
